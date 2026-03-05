@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#f5ede8"/>
+  <rect x="280" y="320" width="240" height="300" rx="8" fill="#e8c8b8" opacity="0.6"/>
+  <circle cx="400" cy="280" r="60" fill="#e8c8b8" opacity="0.6"/>
+  <text x="400" y="700" font-family="serif" font-size="22" fill="#b87060" text-anchor="middle" opacity="0.8">Nilkanth Fashions</text>
+  <text x="400" y="730" font-family="serif" font-size="14" fill="#b87060" text-anchor="middle" opacity="0.5">Image Coming Soon</text>
+</svg>
