@@ -113,7 +113,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <Image
-              src="/images/logo.png"
+              src="/images/logo.jpg"
               alt="Nilkanth Fashions"
               width={48}
               height={48}
@@ -329,7 +329,7 @@ export default function Navbar() {
               <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100 shrink-0">
                 <div className="flex items-center gap-2.5">
                   <Image
-                    src="/images/logo.png"
+                    src="/images/logo.jpg"
                     alt="Nilkanth Fashions"
                     width={36}
                     height={36}

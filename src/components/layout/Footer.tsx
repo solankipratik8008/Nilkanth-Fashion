@@ -39,7 +39,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-4">
               <Image
-                src="/images/logo.png"
+                src="/images/logo.jpg"
                 alt="Nilkanth Fashions"
                 width={48}
                 height={48}
