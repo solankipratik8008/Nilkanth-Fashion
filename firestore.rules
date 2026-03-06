@@ -29,13 +29,21 @@ service cloud.firestore {
       allow read: if isAuthenticated() &&
         (resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isAuthenticated();
-      // Admin can update anything; users can only confirm/decline suggested changes
+      // Admin can update anything; users can respond to changes OR cancel pre-production orders
       allow update: if isAdmin() ||
         (isAuthenticated() &&
          resource.data.userId == request.auth.uid &&
-         (resource.data.status == 'changes-suggested' || resource.data.status == 'awaiting-confirmation') &&
-         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'userResponse', 'updatedAt']) &&
-         (request.resource.data.status == 'user-confirmed' || request.resource.data.status == 'cancelled' || request.resource.data.status == 'waiting-for-fabric'));
+         (
+           // Case 1: Responding to admin suggested changes
+           ((resource.data.status == 'changes-suggested' || resource.data.status == 'awaiting-confirmation') &&
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'userResponse', 'updatedAt']) &&
+            (request.resource.data.status == 'user-confirmed' || request.resource.data.status == 'cancelled' || request.resource.data.status == 'waiting-for-fabric'))
+           ||
+           // Case 2: Cancelling a pre-production order
+           (request.resource.data.status == 'cancelled' &&
+            resource.data.status in ['pending-review', 'awaiting-confirmation', 'user-confirmed', 'waiting-for-fabric'] &&
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'cancelledByUser', 'cancelReason', 'cancelledAt', 'updatedAt']))
+         ));
       allow delete: if isAdmin();
     }
 
@@ -44,13 +52,21 @@ service cloud.firestore {
       allow read: if isAuthenticated() &&
         (resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isAuthenticated();
-      // Admin can update anything; users can respond to admin suggestions
+      // Admin can update anything; users can respond to suggestions OR mark order-placed
       allow update: if isAdmin() ||
         (isAuthenticated() &&
          resource.data.userId == request.auth.uid &&
-         resource.data.status == 'awaiting-confirmation' &&
-         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'userResponse', 'updatedAt']) &&
-         (request.resource.data.status == 'user-confirmed' || request.resource.data.status == 'cancelled' || request.resource.data.status == 'waiting-for-fabric'));
+         (
+           // Case 1: Responding to admin suggestions (awaiting-confirmation)
+           (resource.data.status == 'awaiting-confirmation' &&
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'userResponse', 'updatedAt']) &&
+            (request.resource.data.status == 'user-confirmed' || request.resource.data.status == 'cancelled' || request.resource.data.status == 'waiting-for-fabric'))
+           ||
+           // Case 2: Placing an order from approved request
+           (resource.data.status == 'approved' &&
+            request.resource.data.status == 'order-placed' &&
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'orderId', 'updatedAt']))
+         ));
       allow delete: if isAdmin();
     }
 

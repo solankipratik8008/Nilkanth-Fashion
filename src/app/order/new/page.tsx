@@ -187,14 +187,24 @@ function NewOrderContent() {
       };
 
       const docRef = await addDoc(collection(db, 'orders'), orderData);
-      // Mark the custom design request as order-placed
+
+      // Mark the custom design request as order-placed (best-effort — don't let this block success)
       if (customRequest) {
-        await updateDoc(doc(db, 'customDesignRequests', customRequest.id), { status: 'order-placed', orderId: docRef.id, updatedAt: new Date() });
+        try {
+          await updateDoc(doc(db, 'customDesignRequests', customRequest.id), {
+            status: 'order-placed',
+            orderId: docRef.id,
+            updatedAt: new Date(),
+          });
+        } catch (reqErr) {
+          console.warn('Could not update custom design request status (non-fatal):', reqErr);
+        }
       }
+
       setOrderId(docRef.id);
       setSubmitted(true);
       gtagEvent('purchase', { transaction_id: docRef.id, value: totalPrice, currency: 'CAD', items: [{ item_id: design.id, item_name: design.name, item_category: design.category }] });
-      toast.success('Order submitted successfully! 🎉');
+      toast.success('Order submitted successfully!');
     } catch (err) {
       console.error(err);
       toast.error('Failed to submit order. Please try again.');

@@ -305,6 +305,50 @@ export const onOrderStatusUpdate = functions.firestore
         html: `<p>Hi ${after.userName}, ${message}</p><p><a href="https://nilkanthfashion.ca/user/orders">Track your order</a></p>`,
       }).catch(console.error);
     }
+
+    // Cancellation email (user-initiated or admin)
+    if (after.status === 'cancelled' && after.userEmail) {
+      const orderId = context.params.orderId.slice(-6).toUpperCase();
+      const cancelledByUser = after.cancelledByUser === true;
+      const reasonText = after.cancelReason ? `<p><strong>Reason:</strong> ${after.cancelReason}</p>` : '';
+
+      await transporter.sendMail({
+        from: `"Nilkanth Fashions" <${ADMIN_EMAIL}>`,
+        to: after.userEmail,
+        subject: `Order Cancelled #${orderId} — Nilkanth Fashions`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: #dc2626; padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+              <h1 style="color: white; margin: 0;">Order Cancelled</h1>
+            </div>
+            <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 12px 12px;">
+              <p>Hi <strong>${after.userName}</strong>,</p>
+              <p>${cancelledByUser ? 'Your order' : 'Order'} <strong>#${orderId}</strong> has been cancelled${cancelledByUser ? ' as requested' : ' by our team'}.</p>
+              ${reasonText}
+              <p>If you have questions or this was a mistake, please contact us.</p>
+              <div style="text-align:center; margin:20px 0;">
+                <a href="https://nilkanthfashion.ca/collections" style="background:linear-gradient(135deg,#e11d48,#9333ea); color:white; padding:12px 30px; border-radius:30px; text-decoration:none; font-weight:bold;">
+                  Browse Collections
+                </a>
+              </div>
+              <p style="color:#6b7280; font-size:14px;">— Team Nilkanth Fashions</p>
+            </div>
+          </div>
+        `,
+      }).catch(console.error);
+
+      await transporter.sendMail({
+        from: `"Nilkanth Fashions" <${ADMIN_EMAIL}>`,
+        to: ADMIN_EMAIL,
+        subject: `🚫 Order Cancelled #${orderId} — ${after.userName}`,
+        html: `
+          <p>Order <strong>#${orderId}</strong> was cancelled by <strong>${cancelledByUser ? 'the customer' : 'admin'}</strong>.</p>
+          <p><strong>Customer:</strong> ${after.userName} (${after.userEmail})</p>
+          ${reasonText}
+          <p><a href="https://nilkanthfashion.ca/admin/orders">View in Admin Panel</a></p>
+        `,
+      }).catch(console.error);
+    }
   });
 
 // ====== CALLABLE: Get Analytics Summary ======
