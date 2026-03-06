@@ -5,13 +5,13 @@ import Image from 'next/image';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import {
   ArrowRight, Star, Sparkles, Clock, Shield, Truck, MessageCircle,
-  ChevronRight, TrendingUp, Scissors, Crown, Heart, Users
+  ChevronRight, TrendingUp, Scissors, Crown, Heart, Users, CheckCircle, Award, Palette, Quote
 } from 'lucide-react';
 import { getFeaturedDesigns, getTrendingDesigns, designs as staticDesigns, categories } from '@/data/designs';
 import DesignCard from '@/components/ui/DesignCard';
 import { useTheme } from '@/context/ThemeContext';
 import { useSiteContent } from '@/hooks/useSiteContent';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 const heroSlides = [
@@ -76,6 +76,7 @@ export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [firestoreDesigns, setFirestoreDesigns] = useState<any[]>([]);
+  const [firestoreReviews, setFirestoreReviews] = useState<any[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
@@ -87,6 +88,16 @@ export default function HomePage() {
   useEffect(() => {
     getDocs(collection(db, 'designs')).then(snap => {
       setFirestoreDesigns(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    }).catch(() => {});
+
+    // Load approved reviews for testimonials section
+    getDocs(query(
+      collection(db, 'reviews'),
+      where('approved', '==', true),
+      orderBy('createdAt', 'desc'),
+      limit(6)
+    )).then(snap => {
+      setFirestoreReviews(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     }).catch(() => {});
   }, []);
 
@@ -342,28 +353,115 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* WHY CHOOSE US */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <span className="text-rose-500 font-semibold text-sm uppercase tracking-widest">Our Promise</span>
+              <h2 className="text-4xl font-bold text-gray-900 mt-2 mb-6 leading-tight" style={{ fontFamily: 'var(--font-playfair)' }}>
+                Why Choose<br />Nilkanth Fashions
+              </h2>
+              <div className="space-y-5">
+                {[
+                  { icon: CheckCircle, title: 'Perfectly Fitted, Every Time', desc: 'Every garment is crafted to your exact body measurements — no generic sizing, no compromises.' },
+                  { icon: Award, title: 'Heritage Craftsmanship', desc: 'Over a decade of tailoring expertise blending traditional South Asian artistry with modern silhouettes.' },
+                  { icon: Palette, title: 'Unlimited Customisation', desc: 'Choose your fabric, embroidery style, colour palette, and embellishments — we bring your vision to life.' },
+                  { icon: Shield, title: 'Quality You Can Trust', desc: 'Premium fabrics sourced from trusted suppliers. Every stitch inspected before delivery.' },
+                ].map(({ icon: Icon, title, desc }, i) => (
+                  <motion.div key={title} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex gap-4">
+                    <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className="w-5 h-5 text-rose-500" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
+                      <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-3">
+                  <div className="rounded-2xl overflow-hidden aspect-[3/4] relative bg-gray-100">
+                    <Image src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&q=80" alt="Traditional wear" fill className="object-cover" />
+                  </div>
+                  <div className="rounded-2xl overflow-hidden aspect-square relative bg-rose-50 flex items-center justify-center p-6">
+                    <div className="text-center">
+                      <div className="text-4xl font-bold text-rose-600 mb-1">500+</div>
+                      <div className="text-sm text-gray-600 font-medium">Happy Clients</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3 mt-8">
+                  <div className="rounded-2xl overflow-hidden aspect-square relative bg-purple-50 flex items-center justify-center p-6">
+                    <div className="text-center">
+                      <div className="text-4xl font-bold text-purple-600 mb-1">10+</div>
+                      <div className="text-sm text-gray-600 font-medium">Years of Craft</div>
+                    </div>
+                  </div>
+                  <div className="rounded-2xl overflow-hidden aspect-[3/4] relative bg-gray-100">
+                    <Image src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&q=80" alt="Bridal wear" fill className="object-cover" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS — Firestore-backed */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <span className="text-rose-500 font-semibold text-sm uppercase tracking-widest">Testimonials</span>
+            <span className="text-rose-500 font-semibold text-sm uppercase tracking-widest">Client Stories</span>
             <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>What Our Clients Say</h2>
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-sm">Real reviews from verified customers across Canada</p>
           </motion.div>
+
+          {/* Show Firestore reviews if available, otherwise fall back to static testimonials */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <div className="flex gap-1 mb-4">{[...Array(t.rating)].map((_, j) => <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />)}</div>
-                <p className="text-gray-600 leading-relaxed mb-6 text-sm italic">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <Image src={t.image} alt={t.name} width={44} height={44} className="rounded-full object-cover" />
-                  <div>
-                    <div className="font-semibold text-gray-900 text-sm">{t.name}</div>
-                    <div className="text-xs text-gray-400">{t.role}</div>
+            {(firestoreReviews.length > 0 ? firestoreReviews : testimonials).slice(0, 3).map((t: any, i: number) => {
+              const name = t.name || t.userName || 'Verified Customer';
+              const role = t.role || t.designCategory?.replace(/-/g, ' ') || 'Verified Customer';
+              const text = t.text || t.comment || '';
+              const rating = t.rating || 5;
+              const image = t.image || t.userPhoto || null;
+              return (
+                <motion.div key={t.id || t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+                  className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col">
+                  <Quote className="w-8 h-8 text-rose-100 mb-3" />
+                  <div className="flex gap-1 mb-3">
+                    {[1,2,3,4,5].map(s => (
+                      <Star key={s} className={`w-4 h-4 ${s <= rating ? 'fill-amber-400 text-amber-400' : 'text-gray-200'}`} />
+                    ))}
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                  <p className="text-gray-600 leading-relaxed mb-6 text-sm italic flex-1">"{text}"</p>
+                  <div className="flex items-center gap-3">
+                    {image ? (
+                      <Image src={image} alt={name} width={44} height={44} className="rounded-full object-cover" />
+                    ) : (
+                      <div className="w-11 h-11 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
+                        <span className="text-rose-600 font-bold text-sm">{name[0]?.toUpperCase()}</span>
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-semibold text-gray-900 text-sm">{name}</div>
+                      <div className="text-xs text-gray-400 capitalize">{role}</div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
+
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
+            <Link href="/collections" className="inline-flex items-center gap-2 text-rose-600 font-semibold hover:gap-3 transition-all text-sm">
+              Browse Designs <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
         </div>
       </section>
 
