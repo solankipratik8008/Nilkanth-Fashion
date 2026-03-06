@@ -3,8 +3,9 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import {
-  Search, User, Menu, X, ChevronDown, ChevronRight, Heart, Bell, Crown,
+  Search, User, Menu, X, ChevronDown, ChevronRight, Heart, Bell,
   Package, Ruler, LogOut, ShieldCheck, Upload, LayoutDashboard
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -111,18 +112,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500 to-purple-600 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-              <Crown className="w-5 h-5 text-white" />
-            </div>
-            <div className="hidden sm:block">
-              <span className="text-xl font-bold bg-gradient-to-r from-rose-600 to-purple-600 bg-clip-text text-transparent">
-                Nilkanth
-              </span>
-              <span className={cn(
-                'text-xl font-light ml-1 transition-colors duration-300',
-                isTransparent ? 'text-white/90' : 'text-gray-700'
-              )}>Fashions</span>
-            </div>
+            <Image
+              src="/images/logo.png"
+              alt="Nilkanth Fashions"
+              width={48}
+              height={48}
+              className="rounded-full group-hover:scale-110 transition-transform duration-200"
+              priority
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -331,9 +328,13 @@ export default function Navbar() {
               {/* Panel Header */}
               <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100 shrink-0">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-rose-500 to-purple-600 flex items-center justify-center">
-                    <Crown className="w-4 h-4 text-white" />
-                  </div>
+                  <Image
+                    src="/images/logo.png"
+                    alt="Nilkanth Fashions"
+                    width={36}
+                    height={36}
+                    className="rounded-full"
+                  />
                   <div>
                     <div className="font-bold text-gray-900 text-sm leading-tight">Nilkanth</div>
                     <div className="text-xs text-gray-400 leading-tight">Fashions</div>

@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: 'Nilkanth Fashions – Custom Tailoring & South Asian Dresses in Canada',
     description: 'Bespoke custom tailoring for women and girls across Canada. Traditional, western, and bridal wear — all made to your measurements.',
     siteName: 'Nilkanth Fashions',
-    images: [{ url: 'https://nilkanthfashion.ca/og-image.jpg', width: 1200, height: 630 }],
+    images: [{ url: 'https://nilkanthfashion.ca/images/seo-nilkanth-fashion.jpg', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -65,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             "name": "Nilkanth Fashions",
             "description": "Bespoke custom tailoring for women and girls across Canada. Traditional, western, and bridal South Asian wear made to your measurements.",
             "url": "https://nilkanthfashion.ca",
+            "image": "https://nilkanthfashion.ca/images/seo-nilkanth-fashion.jpg",
             "email": "nilkanthfashions1309@gmail.com",
             "areaServed": "Canada",
             "priceRange": "$$",

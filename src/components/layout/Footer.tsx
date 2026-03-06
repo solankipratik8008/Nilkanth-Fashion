@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Crown, Instagram, Facebook, Twitter, Youtube, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Youtube, Mail, Phone, MapPin, Heart } from 'lucide-react';
 import { useSiteContent } from '@/hooks/useSiteContent';
 
 export default function Footer() {
@@ -36,10 +37,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500 to-purple-600 flex items-center justify-center">
-                <Crown className="w-5 h-5 text-white" />
-              </div>
+            <Link href="/" className="flex items-center gap-3 mb-4">
+              <Image
+                src="/images/logo.png"
+                alt="Nilkanth Fashions"
+                width={48}
+                height={48}
+                className="rounded-full"
+              />
               <div>
                 <span className="text-xl font-bold text-white">Nilkanth</span>
                 <span className="text-xl font-light text-gray-300 ml-1">Fashions</span>
