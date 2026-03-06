@@ -2,15 +2,17 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import {
   ArrowRight, Star, Sparkles, Clock, Shield, Truck, MessageCircle,
   ChevronRight, TrendingUp, Scissors, Crown, Heart, Users
 } from 'lucide-react';
-import { getFeaturedDesigns, getTrendingDesigns, categories } from '@/data/designs';
+import { getFeaturedDesigns, getTrendingDesigns, designs as staticDesigns, categories } from '@/data/designs';
 import DesignCard from '@/components/ui/DesignCard';
 import { useTheme } from '@/context/ThemeContext';
 import { useSiteContent } from '@/hooks/useSiteContent';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const heroSlides = [
   {
@@ -73,6 +75,7 @@ const processSteps = [
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
+  const [firestoreDesigns, setFirestoreDesigns] = useState<any[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
@@ -80,8 +83,30 @@ export default function HomePage() {
   const { theme } = useTheme();
   const { content } = useSiteContent();
 
-  const featuredDesigns = getFeaturedDesigns().slice(0, 8);
-  const trendingDesigns = getTrendingDesigns().slice(0, 8);
+  // Load Firestore overrides so admin changes appear on home page
+  useEffect(() => {
+    getDocs(collection(db, 'designs')).then(snap => {
+      setFirestoreDesigns(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    }).catch(() => {});
+  }, []);
+
+  // Merge static designs with Firestore overrides (same pattern as collections page)
+  const mergeWithFirestore = (designs: any[]) => {
+    const firestoreMap = new Map(firestoreDesigns.map(d => [d.id, d]));
+    return designs
+      .map(d => {
+        const override = firestoreMap.get(d.id);
+        if (override) {
+          if (override.active === false || override.deletedByAdmin === true) return null;
+          return { ...d, ...override };
+        }
+        return d.active !== false ? d : null;
+      })
+      .filter(Boolean);
+  };
+
+  const featuredDesigns = useMemo(() => mergeWithFirestore(getFeaturedDesigns()).slice(0, 8), [firestoreDesigns]);
+  const trendingDesigns = useMemo(() => mergeWithFirestore(getTrendingDesigns()).slice(0, 8), [firestoreDesigns]);
 
   const toggleWishlist = (id: string) => {
     setWishlistIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);

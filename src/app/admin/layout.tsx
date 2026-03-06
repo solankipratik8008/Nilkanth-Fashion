@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   Crown, LayoutDashboard, Package, Palette, Upload, Star,
-  Users, Settings, DollarSign, FileText, Menu, LogOut, ChevronRight, Paintbrush, MessageSquare,
+  Users, Settings, DollarSign, FileText, Menu, LogOut, ChevronRight, Paintbrush, MessageSquare, BarChart3,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/utils/cn';
@@ -13,6 +13,7 @@ import { db } from '@/lib/firebase';
 
 const navLinks = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+  { label: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { label: 'Designs', href: '/admin/designs', icon: Palette },
   { label: 'Custom Requests', href: '/admin/requests', icon: Upload },
   { label: 'Orders', href: '/admin/orders', icon: Package },

@@ -13,6 +13,7 @@ import { FabricType, StandardSize, FabricSource, SizeType, DeliveryMethod } from
 import Button from '@/components/ui/Button';
 import { Check, ChevronRight, AlertCircle, Clock, Package } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { gtagEvent } from '@/lib/gtag';
 
 const fabrics: FabricType[] = ['cotton', 'silk', 'satin', 'chiffon', 'velvet', 'georgette', 'organza', 'linen', 'crepe', 'net', 'brocade', 'chanderi', 'banarasi'];
 const standardSizes: StandardSize[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
@@ -96,6 +97,15 @@ function NewOrderContent() {
     }).finally(() => setDesignLoading(false));
   }, [designId, requestId]);
 
+  // Derive fabric options for custom design requests
+  const isProvideOwnFabric = customRequest?.userResponse?.type === 'provide-own';
+  const adminSuggestedFabrics: FabricType[] = customRequest?.adminSuggestions?.fabrics?.length
+    ? customRequest.adminSuggestions.fabrics
+    : [];
+  const availableFabrics: FabricType[] = customRequest
+    ? (adminSuggestedFabrics.length > 0 ? adminSuggestedFabrics : fabrics)
+    : fabrics;
+
   const [currentStep, setCurrentStep] = useState(0);
   const [fabric, setFabric] = useState<FabricType>('silk');
   const [fabricSource, setFabricSource] = useState<FabricSource>('nilkanth-sources');
@@ -108,6 +118,16 @@ function NewOrderContent() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [orderId, setOrderId] = useState('');
+
+  // Pre-set fabric from custom request user response or first admin suggestion
+  useEffect(() => {
+    if (!customRequest) return;
+    if (customRequest.userResponse?.selectedFabric) {
+      setFabric(customRequest.userResponse.selectedFabric as FabricType);
+    } else if (adminSuggestedFabrics.length > 0) {
+      setFabric(adminSuggestedFabrics[0]);
+    }
+  }, [customRequest]);
 
   useEffect(() => {
     if (authLoading) return; // Wait for Firebase Auth to resolve before redirecting
@@ -173,6 +193,7 @@ function NewOrderContent() {
       }
       setOrderId(docRef.id);
       setSubmitted(true);
+      gtagEvent('purchase', { transaction_id: docRef.id, value: totalPrice, currency: 'CAD', items: [{ item_id: design.id, item_name: design.name, item_category: design.category }] });
       toast.success('Order submitted successfully! 🎉');
     } catch (err) {
       console.error(err);
@@ -248,11 +269,38 @@ function NewOrderContent() {
 
                 <div className="mb-6">
                   <label className="block font-semibold text-gray-700 mb-3">Select Fabric</label>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {fabrics.map(f => (
-                      <button key={f} onClick={() => setFabric(f)} className={`py-2.5 px-3 rounded-xl text-sm font-medium border-2 transition-all capitalize ${fabric === f ? 'border-rose-500 bg-rose-50 text-rose-700' : 'border-gray-100 text-gray-600 hover:border-rose-200'}`}>{f}</button>
-                    ))}
-                  </div>
+
+                  {/* Admin restriction banner */}
+                  {customRequest && adminSuggestedFabrics.length > 0 && !isProvideOwnFabric && (
+                    <div className="mb-3 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      Fabric selection is limited to options approved by our admin for your custom design.
+                    </div>
+                  )}
+
+                  {isProvideOwnFabric ? (
+                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                      <div className="flex items-start gap-3">
+                        <Package className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
+                        <div>
+                          <p className="font-semibold text-blue-800 text-sm mb-1">You selected: Provide Own Fabric</p>
+                          <p className="text-xs text-blue-700 mb-2">The fabric you selected during your custom design request will be used. Please deliver your fabric to our store within <strong>15 days</strong>.</p>
+                          <div className="bg-white rounded-lg p-3 text-xs text-gray-700 space-y-1 border border-blue-100">
+                            <p className="font-semibold text-gray-800">Store Address:</p>
+                            <p>Nilkanth Fashions</p>
+                            <p>Drop off your fabric and mention your order ID when delivering.</p>
+                            <p className="text-blue-600 font-medium mt-1">Contact: nilkanthfashion@gmail.com</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                      {availableFabrics.map(f => (
+                        <button key={f} onClick={() => setFabric(f)} className={`py-2.5 px-3 rounded-xl text-sm font-medium border-2 transition-all capitalize ${fabric === f ? 'border-rose-500 bg-rose-50 text-rose-700' : 'border-gray-100 text-gray-600 hover:border-rose-200'}`}>{f}</button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-6">

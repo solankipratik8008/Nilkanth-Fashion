@@ -11,6 +11,7 @@ import {
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { getDesignById, designs } from '@/data/designs';
+import { gtagEvent } from '@/lib/gtag';
 import DesignCard from '@/components/ui/DesignCard';
 import { formatPrice, getProductionTimeline } from '@/utils/pricing';
 import { useAuth } from '@/context/AuthContext';
@@ -40,8 +41,13 @@ export default function DesignDetailPage() {
         if (d.active === false || d.deletedByAdmin === true) {
           setDesign(null);
         } else {
-          setDesign({ id: snap.id, ...d });
+          // Merge: static data provides basePrice/complexity fallbacks; Firestore overrides everything else
+          const merged = { ...staticDesign, id: snap.id, ...d };
+          setDesign(merged);
+          gtagEvent('view_item', { item_id: snap.id, item_name: merged.name, item_category: merged.category });
         }
+      } else if (staticDesign) {
+        gtagEvent('view_item', { item_id: staticDesign.id, item_name: staticDesign.name, item_category: staticDesign.category });
       }
       // If Firestore has no doc, keep staticDesign (already set in useState)
     }).catch(() => {
