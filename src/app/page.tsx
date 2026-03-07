@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { getFeaturedDesigns, getTrendingDesigns, designs as staticDesigns, categories } from '@/data/designs';
 import DesignCard from '@/components/ui/DesignCard';
+import FloralDivider from '@/components/ui/FloralDivider';
 import { useTheme } from '@/context/ThemeContext';
 import { useSiteContent } from '@/hooks/useSiteContent';
 import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
@@ -144,8 +145,9 @@ export default function HomePage() {
       <section ref={heroRef} className="relative min-h-screen flex items-center">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
           <Image src={slide.image} alt="Hero" fill className="object-cover" priority quality={90} />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-transparent to-transparent" />
         </motion.div>
 
         <motion.div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24" style={{ opacity: heroOpacity }}>
@@ -180,13 +182,13 @@ export default function HomePage() {
       </section>
 
       {/* STATS */}
-      <section className="py-12 bg-[#fdfaff] border-b border-violet-100">
+      <section className="py-14 bg-gradient-to-b from-[#fdfaff] to-violet-50/60 border-b border-violet-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map(({ value, label, icon: Icon }) => (
-              <motion.div key={label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-violet-50 rounded-xl mb-3"><Icon className="w-6 h-6 text-violet-500" /></div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
+              <motion.div key={label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center group">
+                <div className="inline-flex items-center justify-center w-14 h-14 bg-white shadow-sm border border-violet-100 rounded-2xl mb-3 group-hover:border-violet-300 group-hover:shadow-md transition-all"><Icon className="w-6 h-6 text-violet-500" /></div>
+                <div className="text-3xl font-bold text-gray-900 mb-1" style={{ fontFamily: 'var(--font-playfair)' }}>{value}</div>
                 <div className="text-sm text-gray-500">{label}</div>
               </motion.div>
             ))}
@@ -195,17 +197,18 @@ export default function HomePage() {
       </section>
 
       {/* CATEGORIES */}
-      <section className="py-20 bg-violet-50/40">
+      <section className="py-24 floral-pattern-bg bg-violet-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-4">
             <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Browse By</span>
-            <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Our Collections</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Our Collections</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">Every design is custom-made to order</p>
           </motion.div>
+          <FloralDivider className="mb-12 max-w-xs mx-auto" />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {categories.map((cat, i) => (
               <motion.div key={cat.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <Link href={`/collections/${cat.id}`} className="group flex flex-col items-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-violet-200 transition-all duration-300 hover:-translate-y-1">
+                <Link href={`/collections/${cat.id}`} className="group flex flex-col items-center p-6 bg-white/80 backdrop-blur rounded-2xl shadow-sm hover:shadow-xl border border-violet-100/60 hover:border-violet-300 transition-all duration-300 hover:-translate-y-1">
                   <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">{cat.icon}</span>
                   <h3 className="text-sm font-bold text-gray-800 text-center mb-1">{cat.label}</h3>
                   <span className="text-xs text-gray-400">{cat.count} designs</span>
@@ -220,15 +223,16 @@ export default function HomePage() {
       </section>
 
       {/* FEATURED DESIGNS */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-4">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Handpicked</span>
-              <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Featured Designs</h2>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Featured Designs</h2>
             </motion.div>
             <Link href="/collections" className="flex items-center gap-2 text-violet-600 font-semibold hover:gap-3 transition-all">View All <ArrowRight className="w-4 h-4" /></Link>
           </div>
+          <FloralDivider className="mb-10" />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
             {featuredDesigns.map((design, i) => (
               <motion.div key={design.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
@@ -260,15 +264,16 @@ export default function HomePage() {
       </section>
 
       {/* TRENDING */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-gradient-to-b from-white to-violet-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-4">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <span className="text-orange-500 font-semibold text-sm uppercase tracking-widest flex items-center gap-1"><TrendingUp className="w-4 h-4" /> Trending Now</span>
-              <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Hot This Season</h2>
+              <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest flex items-center gap-1"><TrendingUp className="w-4 h-4" /> Trending Now</span>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Hot This Season</h2>
             </motion.div>
-            <Link href="/collections?filter=trending" className="flex items-center gap-2 text-orange-500 font-semibold hover:gap-3 transition-all">See All <ArrowRight className="w-4 h-4" /></Link>
+            <Link href="/collections?filter=trending" className="flex items-center gap-2 text-violet-600 font-semibold hover:gap-3 transition-all">See All <ArrowRight className="w-4 h-4" /></Link>
           </div>
+          <FloralDivider className="mb-10" />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
             {trendingDesigns.map((design, i) => (
               <motion.div key={design.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
@@ -314,12 +319,13 @@ export default function HomePage() {
       )}
 
       {/* HOW IT WORKS */}
-      <section className="py-24 bg-gradient-to-br from-violet-50 to-purple-50">
+      <section className="py-28 floral-pattern-bg bg-gradient-to-br from-violet-50 to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-4">
             <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Simple Process</span>
-            <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>How It Works</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>How It Works</h2>
           </motion.div>
+          <FloralDivider className="mb-14 max-w-xs mx-auto" />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
             {processSteps.map((step, i) => (
               <motion.div key={step.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex flex-col items-center text-center">
@@ -339,11 +345,11 @@ export default function HomePage() {
       </section>
 
       {/* FEATURES */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map(({ icon: Icon, title, desc }, i) => (
-              <motion.div key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-6 rounded-2xl border border-gray-100 hover:border-violet-200 hover:shadow-lg transition-all group">
+              <motion.div key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-7 rounded-2xl border border-violet-100/60 hover:border-violet-300 hover:shadow-lg bg-white transition-all group">
                 <div className="w-12 h-12 bg-violet-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-violet-100 transition-colors"><Icon className="w-6 h-6 text-violet-500" /></div>
                 <h3 className="font-bold text-gray-900 mb-2">{title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
@@ -354,12 +360,12 @@ export default function HomePage() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-24 bg-white">
+      <section className="py-28 bg-gradient-to-b from-white via-violet-50/20 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Our Promise</span>
-              <h2 className="text-4xl font-bold text-gray-900 mt-2 mb-6 leading-tight" style={{ fontFamily: 'var(--font-playfair)' }}>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mt-2 mb-6 leading-tight" style={{ fontFamily: 'var(--font-playfair)' }}>
                 Why Choose<br />Nilkanth Fashions
               </h2>
               <div className="space-y-5">
@@ -413,13 +419,14 @@ export default function HomePage() {
       </section>
 
       {/* TESTIMONIALS — Firestore-backed */}
-      <section className="py-24 bg-violet-50/30">
+      <section className="py-28 floral-pattern-bg bg-violet-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-4">
             <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Client Stories</span>
-            <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>What Our Clients Say</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>What Our Clients Say</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto text-sm">Real reviews from verified customers across Canada</p>
           </motion.div>
+          <FloralDivider className="mb-12 max-w-xs mx-auto" />
 
           {/* Show Firestore reviews if available, otherwise fall back to static testimonials */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -431,8 +438,8 @@ export default function HomePage() {
               const image = t.image || t.userPhoto || null;
               return (
                 <motion.div key={t.id || t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                  className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col">
-                  <Quote className="w-8 h-8 text-rose-100 mb-3" />
+                  className="bg-white/90 backdrop-blur rounded-2xl p-7 shadow-sm border border-violet-100/60 hover:border-violet-200 hover:shadow-md transition-all flex flex-col">
+                  <Quote className="w-8 h-8 text-violet-200 mb-3" />
                   <div className="flex gap-1 mb-3">
                     {[1,2,3,4,5].map(s => (
                       <Star key={s} className={`w-4 h-4 ${s <= rating ? 'fill-amber-400 text-amber-400' : 'text-gray-200'}`} />
@@ -466,13 +473,17 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-r from-violet-700 via-purple-600 to-violet-800 text-white relative overflow-hidden">
+      <section className="py-28 bg-gradient-to-br from-violet-800 via-purple-700 to-violet-900 text-white relative overflow-hidden">
+        {/* Decorative floral corners */}
+        <div className="absolute top-0 left-0 w-64 h-64 opacity-10" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cellipse cx='60' cy='35' rx='8' ry='12' fill='white' opacity='0.6'/%3E%3Cellipse cx='60' cy='85' rx='8' ry='12' fill='white' opacity='0.6'/%3E%3Cellipse cx='35' cy='60' rx='12' ry='8' fill='white' opacity='0.6'/%3E%3Cellipse cx='85' cy='60' rx='12' ry='8' fill='white' opacity='0.6'/%3E%3Ccircle cx='60' cy='60' r='14' fill='white' opacity='0.5'/%3E%3C/svg%3E\")", backgroundRepeat: 'repeat', backgroundSize: '60px 60px' }} />
+        <div className="absolute bottom-0 right-0 w-64 h-64 opacity-10" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cellipse cx='60' cy='35' rx='8' ry='12' fill='white' opacity='0.6'/%3E%3Cellipse cx='60' cy='85' rx='8' ry='12' fill='white' opacity='0.6'/%3E%3Cellipse cx='35' cy='60' rx='12' ry='8' fill='white' opacity='0.6'/%3E%3Cellipse cx='85' cy='60' rx='12' ry='8' fill='white' opacity='0.6'/%3E%3Ccircle cx='60' cy='60' r='14' fill='white' opacity='0.5'/%3E%3C/svg%3E\")", backgroundRepeat: 'repeat', backgroundSize: '60px 60px' }} />
         <div className="relative max-w-4xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium mb-6">
               <Heart className="w-4 h-4 text-pink-200 fill-pink-200" /> Have a custom design in mind?
             </span>
             <h2 className="text-4xl sm:text-5xl font-bold mb-4" style={{ fontFamily: 'var(--font-playfair)' }}>Upload Your Dream Design</h2>
+            <FloralDivider variant="dark" className="max-w-xs mx-auto mb-6" />
             <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">Upload your inspiration image and our expert tailors will bring it to life.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/custom-design" className="inline-flex items-center gap-2 px-10 py-4 bg-white text-violet-600 font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all text-lg">

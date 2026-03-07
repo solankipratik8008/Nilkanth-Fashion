@@ -29,8 +29,8 @@ export default function DesignCard({ design, className, wishlistIds = [], onWish
 
   return (
     <motion.div
-      className={cn('group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300', className)}
-      whileHover={{ y: -4 }}
+      className={cn('group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-violet-100/50 hover:border-violet-300 transition-all duration-300', className)}
+      whileHover={{ y: -5 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
     >
@@ -101,10 +101,10 @@ export default function DesignCard({ design, className, wishlistIds = [], onWish
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-4 pb-5">
         <div className="flex items-start justify-between gap-2 mb-2">
           <Link href={`/designs/${design.id}`} className="group/title">
-            <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover/title:text-violet-600 transition-colors line-clamp-2">
+            <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover/title:text-violet-600 transition-colors line-clamp-2" style={{ fontFamily: 'var(--font-playfair)' }}>
               {design.name}
             </h3>
           </Link>
@@ -135,14 +135,14 @@ export default function DesignCard({ design, className, wishlistIds = [], onWish
         </div>
 
         {/* Price */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pt-1 border-t border-violet-50">
           <div>
             <span className="text-xs text-gray-400">Starting from</span>
-            <div className="text-lg font-bold text-violet-600">{formatPrice(design.basePrice)}</div>
+            <div className="text-lg font-bold text-violet-600" style={{ fontFamily: 'var(--font-playfair)' }}>{formatPrice(design.basePrice)}</div>
           </div>
           <Link
             href={`/order/new?designId=${design.id}`}
-            className="px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-700 text-white text-xs font-bold rounded-full hover:shadow-md hover:scale-105 transition-all"
+            className="px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-700 text-white text-xs font-bold rounded-full hover:shadow-lg hover:scale-105 transition-all"
           >
             Order
           </Link>
