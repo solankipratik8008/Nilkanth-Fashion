@@ -117,8 +117,26 @@ export default function HomePage() {
       .filter(Boolean);
   };
 
-  const featuredDesigns = useMemo(() => mergeWithFirestore(getFeaturedDesigns()).slice(0, 8), [firestoreDesigns]);
-  const trendingDesigns = useMemo(() => mergeWithFirestore(getTrendingDesigns()).slice(0, 8), [firestoreDesigns]);
+  // IDs of static designs (used to identify Firestore-only / admin-added designs)
+  const staticIds = useMemo(() => new Set(staticDesigns.map(d => d.id)), []);
+
+  // Firestore-only designs that exist in Firestore but NOT in the static data file
+  const firestoreOnlyDesigns = useMemo(() =>
+    firestoreDesigns.filter(d => !staticIds.has(d.id) && d.active !== false && d.deletedByAdmin !== true),
+    [firestoreDesigns, staticIds]
+  );
+
+  const featuredDesigns = useMemo(() => {
+    const staticFeatured = mergeWithFirestore(getFeaturedDesigns());
+    const firestoreFeatured = firestoreOnlyDesigns.filter(d => d.featured === true);
+    return [...staticFeatured, ...firestoreFeatured];
+  }, [firestoreDesigns, firestoreOnlyDesigns]);
+
+  const trendingDesigns = useMemo(() => {
+    const staticTrending = mergeWithFirestore(getTrendingDesigns());
+    const firestoreTrending = firestoreOnlyDesigns.filter(d => d.trending === true);
+    return [...staticTrending, ...firestoreTrending];
+  }, [firestoreDesigns, firestoreOnlyDesigns]);
 
   const toggleWishlist = (id: string) => {
     setWishlistIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
