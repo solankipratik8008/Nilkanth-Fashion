@@ -156,13 +156,13 @@ export default function HomePage() {
             </motion.div>
             <motion.h1 key={`title-${currentSlide}`} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-4" style={{ fontFamily: 'var(--font-playfair)' }}>
               {slide.title}{' '}
-              <span className="bg-gradient-to-r from-rose-300 to-pink-300 bg-clip-text text-transparent">{slide.highlight}</span>
+              <span className="bg-gradient-to-r from-violet-200 to-purple-200 bg-clip-text text-transparent">{slide.highlight}</span>
             </motion.h1>
             <motion.p key={`sub-${currentSlide}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-white/80 text-lg sm:text-xl leading-relaxed mb-8 max-w-xl">
               {slide.subtitle}
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col sm:flex-row gap-4">
-              <Link href={slide.ctaHref} className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all text-lg">
+              <Link href={slide.ctaHref} className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-700 text-white font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all text-lg">
                 {slide.cta} <ArrowRight className="w-5 h-5" />
               </Link>
               <Link href="/custom-design" className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/20 transition-all text-lg">
@@ -180,12 +180,12 @@ export default function HomePage() {
       </section>
 
       {/* STATS */}
-      <section className="py-12 bg-white border-b border-gray-100">
+      <section className="py-12 bg-[#fdfaff] border-b border-violet-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map(({ value, label, icon: Icon }) => (
               <motion.div key={label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-rose-50 rounded-xl mb-3"><Icon className="w-6 h-6 text-rose-500" /></div>
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-violet-50 rounded-xl mb-3"><Icon className="w-6 h-6 text-violet-500" /></div>
                 <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
                 <div className="text-sm text-gray-500">{label}</div>
               </motion.div>
@@ -195,21 +195,21 @@ export default function HomePage() {
       </section>
 
       {/* CATEGORIES */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-violet-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <span className="text-rose-500 font-semibold text-sm uppercase tracking-widest">Browse By</span>
+            <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Browse By</span>
             <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Our Collections</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">Every design is custom-made to order</p>
           </motion.div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {categories.map((cat, i) => (
               <motion.div key={cat.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <Link href={`/collections/${cat.id}`} className="group flex flex-col items-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-rose-200 transition-all duration-300 hover:-translate-y-1">
+                <Link href={`/collections/${cat.id}`} className="group flex flex-col items-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-violet-200 transition-all duration-300 hover:-translate-y-1">
                   <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">{cat.icon}</span>
                   <h3 className="text-sm font-bold text-gray-800 text-center mb-1">{cat.label}</h3>
                   <span className="text-xs text-gray-400">{cat.count} designs</span>
-                  <div className="mt-3 flex items-center gap-1 text-rose-500 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="mt-3 flex items-center gap-1 text-violet-500 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                     Explore <ChevronRight className="w-3 h-3" />
                   </div>
                 </Link>
@@ -224,10 +224,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-12">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <span className="text-rose-500 font-semibold text-sm uppercase tracking-widest">Handpicked</span>
+              <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Handpicked</span>
               <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Featured Designs</h2>
             </motion.div>
-            <Link href="/collections" className="flex items-center gap-2 text-rose-600 font-semibold hover:gap-3 transition-all">View All <ArrowRight className="w-4 h-4" /></Link>
+            <Link href="/collections" className="flex items-center gap-2 text-violet-600 font-semibold hover:gap-3 transition-all">View All <ArrowRight className="w-4 h-4" /></Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
             {featuredDesigns.map((design, i) => (
@@ -243,7 +243,7 @@ export default function HomePage() {
       <section className="py-20 bg-gray-950 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <span className="text-rose-400 font-semibold text-sm uppercase tracking-widest">Perfect For</span>
+            <span className="text-violet-400 font-semibold text-sm uppercase tracking-widest">Perfect For</span>
             <h2 className="text-4xl font-bold mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Every Occasion</h2>
           </motion.div>
           <div className="flex flex-wrap justify-center gap-4">
@@ -284,7 +284,7 @@ export default function HomePage() {
         <section className="py-20 bg-gray-950 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-              <span className="text-rose-400 font-semibold text-sm uppercase tracking-widest">Behind the Craft</span>
+              <span className="text-violet-400 font-semibold text-sm uppercase tracking-widest">Behind the Craft</span>
               <h2 className="text-4xl font-bold mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>Watch Us Create</h2>
               <p className="text-gray-400 mt-3 max-w-xl mx-auto">A glimpse into our craftsmanship and passion for fashion</p>
             </motion.div>
@@ -314,24 +314,24 @@ export default function HomePage() {
       )}
 
       {/* HOW IT WORKS */}
-      <section className="py-24 bg-gradient-to-br from-rose-50 to-purple-50">
+      <section className="py-24 bg-gradient-to-br from-violet-50 to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="text-rose-500 font-semibold text-sm uppercase tracking-widest">Simple Process</span>
+            <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Simple Process</span>
             <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>How It Works</h2>
           </motion.div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
             {processSteps.map((step, i) => (
               <motion.div key={step.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-white shadow-md border-2 border-rose-200 flex items-center justify-center text-2xl mb-4">{step.icon}</div>
-                <span className="text-xs font-bold text-rose-500 mb-1">{step.step}</span>
+                <div className="w-16 h-16 rounded-full bg-white shadow-md border-2 border-violet-200 flex items-center justify-center text-2xl mb-4">{step.icon}</div>
+                <span className="text-xs font-bold text-violet-500 mb-1">{step.step}</span>
                 <h3 className="text-sm font-bold text-gray-900 mb-1">{step.title}</h3>
                 <p className="text-xs text-gray-500 leading-relaxed">{step.desc}</p>
               </motion.div>
             ))}
           </div>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-12">
-            <Link href="/collections" className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all text-lg">
+            <Link href="/collections" className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-violet-600 to-purple-700 text-white font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all text-lg">
               Start Browsing <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>
@@ -343,8 +343,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map(({ icon: Icon, title, desc }, i) => (
-              <motion.div key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-6 rounded-2xl border border-gray-100 hover:border-rose-200 hover:shadow-lg transition-all group">
-                <div className="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-rose-100 transition-colors"><Icon className="w-6 h-6 text-rose-500" /></div>
+              <motion.div key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-6 rounded-2xl border border-gray-100 hover:border-violet-200 hover:shadow-lg transition-all group">
+                <div className="w-12 h-12 bg-violet-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-violet-100 transition-colors"><Icon className="w-6 h-6 text-violet-500" /></div>
                 <h3 className="font-bold text-gray-900 mb-2">{title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
               </motion.div>
@@ -358,7 +358,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <span className="text-rose-500 font-semibold text-sm uppercase tracking-widest">Our Promise</span>
+              <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Our Promise</span>
               <h2 className="text-4xl font-bold text-gray-900 mt-2 mb-6 leading-tight" style={{ fontFamily: 'var(--font-playfair)' }}>
                 Why Choose<br />Nilkanth Fashions
               </h2>
@@ -370,8 +370,8 @@ export default function HomePage() {
                   { icon: Shield, title: 'Quality You Can Trust', desc: 'Premium fabrics sourced from trusted suppliers. Every stitch inspected before delivery.' },
                 ].map(({ icon: Icon, title, desc }, i) => (
                   <motion.div key={title} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex gap-4">
-                    <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
-                      <Icon className="w-5 h-5 text-rose-500" />
+                    <div className="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className="w-5 h-5 text-violet-500" />
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
@@ -388,9 +388,9 @@ export default function HomePage() {
                   <div className="rounded-2xl overflow-hidden aspect-[3/4] relative bg-gray-100">
                     <Image src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&q=80" alt="Traditional wear" fill className="object-cover" />
                   </div>
-                  <div className="rounded-2xl overflow-hidden aspect-square relative bg-rose-50 flex items-center justify-center p-6">
+                  <div className="rounded-2xl overflow-hidden aspect-square relative bg-violet-50 flex items-center justify-center p-6">
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-rose-600 mb-1">500+</div>
+                      <div className="text-4xl font-bold text-violet-600 mb-1">500+</div>
                       <div className="text-sm text-gray-600 font-medium">Happy Clients</div>
                     </div>
                   </div>
@@ -413,10 +413,10 @@ export default function HomePage() {
       </section>
 
       {/* TESTIMONIALS — Firestore-backed */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-violet-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <span className="text-rose-500 font-semibold text-sm uppercase tracking-widest">Client Stories</span>
+            <span className="text-violet-500 font-semibold text-sm uppercase tracking-widest">Client Stories</span>
             <h2 className="text-4xl font-bold text-gray-900 mt-2" style={{ fontFamily: 'var(--font-playfair)' }}>What Our Clients Say</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto text-sm">Real reviews from verified customers across Canada</p>
           </motion.div>
@@ -443,8 +443,8 @@ export default function HomePage() {
                     {image ? (
                       <Image src={image} alt={name} width={44} height={44} className="rounded-full object-cover" />
                     ) : (
-                      <div className="w-11 h-11 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
-                        <span className="text-rose-600 font-bold text-sm">{name[0]?.toUpperCase()}</span>
+                      <div className="w-11 h-11 rounded-full bg-violet-100 flex items-center justify-center shrink-0">
+                        <span className="text-violet-600 font-bold text-sm">{name[0]?.toUpperCase()}</span>
                       </div>
                     )}
                     <div>
@@ -458,7 +458,7 @@ export default function HomePage() {
           </div>
 
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
-            <Link href="/collections" className="inline-flex items-center gap-2 text-rose-600 font-semibold hover:gap-3 transition-all text-sm">
+            <Link href="/collections" className="inline-flex items-center gap-2 text-violet-600 font-semibold hover:gap-3 transition-all text-sm">
               Browse Designs <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
@@ -466,7 +466,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-r from-rose-600 via-pink-600 to-purple-700 text-white relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-r from-violet-700 via-purple-600 to-violet-800 text-white relative overflow-hidden">
         <div className="relative max-w-4xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium mb-6">
@@ -475,7 +475,7 @@ export default function HomePage() {
             <h2 className="text-4xl sm:text-5xl font-bold mb-4" style={{ fontFamily: 'var(--font-playfair)' }}>Upload Your Dream Design</h2>
             <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">Upload your inspiration image and our expert tailors will bring it to life.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/custom-design" className="inline-flex items-center gap-2 px-10 py-4 bg-white text-rose-600 font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all text-lg">
+              <Link href="/custom-design" className="inline-flex items-center gap-2 px-10 py-4 bg-white text-violet-600 font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all text-lg">
                 Upload Design <ArrowRight className="w-5 h-5" />
               </Link>
               <Link href="/contact" className="inline-flex items-center gap-2 px-10 py-4 bg-white/10 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/20 transition-all text-lg">

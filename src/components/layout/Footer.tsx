@@ -20,14 +20,14 @@ export default function Footer() {
   return (
     <footer className="bg-gray-950 text-white">
       {/* Newsletter */}
-      <div className="bg-gradient-to-r from-rose-600 via-pink-600 to-purple-700 py-12">
+      <div className="bg-gradient-to-r from-violet-700 via-purple-600 to-violet-800 py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h3 className="text-2xl font-bold mb-2">Stay in Style</h3>
           <p className="text-white/80 mb-6">Get exclusive updates on new collections, seasonal trends, and special offers</p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input type="email" placeholder="Your email address"
               className="flex-1 px-5 py-3 rounded-full bg-white/20 backdrop-blur border border-white/30 text-white placeholder-white/60 focus:outline-none focus:border-white" />
-            <button className="px-6 py-3 bg-white text-rose-600 font-bold rounded-full hover:bg-gray-100 transition-colors whitespace-nowrap">Subscribe</button>
+            <button className="px-6 py-3 bg-white text-violet-600 font-bold rounded-full hover:bg-gray-100 transition-colors whitespace-nowrap">Subscribe</button>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@ export default function Footer() {
               <div className="flex gap-4">
                 {socials.map(({ Icon, href, label }) => (
                   <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-rose-600 flex items-center justify-center transition-all duration-200 hover:scale-110">
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-violet-600 flex items-center justify-center transition-all duration-200 hover:scale-110">
                     <Icon className="w-4 h-4" />
                   </a>
                 ))}
@@ -76,7 +76,7 @@ export default function Footer() {
                 ['Women Western', '/collections/women-western'],
                 ['Bridal Wear', '/collections/bridal-wear'],
               ].map(([label, href]) => (
-                <li key={label}><Link href={href} className="text-gray-400 hover:text-rose-400 text-sm transition-colors">{label}</Link></li>
+                <li key={label}><Link href={href} className="text-gray-400 hover:text-violet-400 text-sm transition-colors">{label}</Link></li>
               ))}
             </ul>
           </div>
@@ -92,7 +92,7 @@ export default function Footer() {
                 ['Alterations & Fitting', '/contact'],
                 ['Rush Orders', '/contact'],
               ].map(([label, href]) => (
-                <li key={label}><Link href={href} className="text-gray-400 hover:text-rose-400 text-sm transition-colors">{label}</Link></li>
+                <li key={label}><Link href={href} className="text-gray-400 hover:text-violet-400 text-sm transition-colors">{label}</Link></li>
               ))}
             </ul>
           </div>
@@ -102,19 +102,19 @@ export default function Footer() {
             <h4 className="font-semibold text-white mb-4 text-sm uppercase tracking-widest">Contact</h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-rose-400 mt-0.5 shrink-0" />
+                <MapPin className="w-4 h-4 text-violet-400 mt-0.5 shrink-0" />
                 <span className="text-gray-400 text-sm">{content.footerAddress}</span>
               </li>
               {content.footerEmail && (
                 <li className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-rose-400 shrink-0" />
-                  <a href={`mailto:${content.footerEmail}`} className="text-gray-400 hover:text-rose-400 text-sm transition-colors">{content.footerEmail}</a>
+                  <Mail className="w-4 h-4 text-violet-400 shrink-0" />
+                  <a href={`mailto:${content.footerEmail}`} className="text-gray-400 hover:text-violet-400 text-sm transition-colors">{content.footerEmail}</a>
                 </li>
               )}
               {content.footerPhone && (
                 <li className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-rose-400 shrink-0" />
-                  <a href={`tel:${content.footerPhone.replace(/\s/g, '')}`} className="text-gray-400 hover:text-rose-400 text-sm transition-colors">{content.footerPhone}</a>
+                  <Phone className="w-4 h-4 text-violet-400 shrink-0" />
+                  <a href={`tel:${content.footerPhone.replace(/\s/g, '')}`} className="text-gray-400 hover:text-violet-400 text-sm transition-colors">{content.footerPhone}</a>
                 </li>
               )}
             </ul>
@@ -129,12 +129,12 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} Nilkanth Fashions. All rights reserved. Made with{' '}
-            <Heart className="inline w-3.5 h-3.5 text-rose-500 fill-rose-500" />{' '}in Canada.
+            <Heart className="inline w-3.5 h-3.5 text-violet-500 fill-violet-500" />{' '}in Canada.
           </p>
           <div className="flex gap-6 text-sm text-gray-500">
-            <Link href="/privacy" className="hover:text-rose-400 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-rose-400 transition-colors">Terms of Service</Link>
-            <Link href="/shipping" className="hover:text-rose-400 transition-colors">Shipping Policy</Link>
+            <Link href="/privacy" className="hover:text-violet-400 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-violet-400 transition-colors">Terms of Service</Link>
+            <Link href="/shipping" className="hover:text-violet-400 transition-colors">Shipping Policy</Link>
           </div>
         </div>
       </div>

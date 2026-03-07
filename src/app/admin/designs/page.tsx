@@ -70,26 +70,30 @@ export default function AdminDesignsPage() {
     setDeleting(design.id);
     try {
       if (design._source === 'firestore') {
-        // Delete images from Storage
+        // Delete images from Storage (only Firebase Storage URLs, not external URLs)
         if (design.images?.length) {
           await Promise.allSettled(
-            design.images.map((url: string) => {
-              try { return deleteObject(ref(storage, url)); } catch { return Promise.resolve(); }
-            })
+            design.images
+              .filter((url: string) => url.includes('firebasestorage.googleapis.com'))
+              .map((url: string) => {
+                try {
+                  // Extract storage path from full HTTPS URL
+                  const path = decodeURIComponent(url.split('/o/')[1]?.split('?')[0] || '');
+                  return path ? deleteObject(ref(storage, path)) : Promise.resolve();
+                } catch { return Promise.resolve(); }
+              })
           );
         }
         await deleteDoc(doc(db, 'designs', design.id));
         setFirestoreDesigns(prev => prev.filter(d => d.id !== design.id));
       } else {
-        // Static design: save a "hidden" override to Firestore
+        // Static design: save a minimal "tombstone" override to Firestore
         await setDoc(doc(db, 'designs', design.id), {
-          ...design,
           active: false,
-          _source: undefined,
           deletedByAdmin: true,
-          updatedAt: new Date(),
+          deletedAt: new Date(),
         });
-        setFirestoreDesigns(prev => [...prev, { ...design, active: false, _source: 'firestore' }]);
+        setFirestoreDesigns(prev => [...prev, { ...design, active: false, deletedByAdmin: true, _source: 'firestore' }]);
       }
       toast.success('Design removed');
     } catch (e) {

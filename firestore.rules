@@ -104,6 +104,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Dynamic Pages (public read, admin write)
+    match /dynamicPages/{pageId} {
+      allow read: if true;
+      allow write, delete: if isAdmin();
+    }
+
     // Notifications
     match /notifications/{notificationId} {
       allow read: if isAuthenticated() &&

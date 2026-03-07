@@ -138,10 +138,10 @@ export default function Navbar() {
                     pathname === item.href
                       ? isTransparent
                         ? 'text-white bg-white/15 font-semibold'
-                        : 'text-rose-600 bg-rose-50 font-semibold'
+                        : 'text-violet-600 bg-violet-50 font-semibold'
                       : isTransparent
                       ? 'text-white/90 hover:text-white hover:bg-white/10'
-                      : 'text-gray-700 hover:text-rose-600 hover:bg-rose-50'
+                      : 'text-gray-700 hover:text-violet-600 hover:bg-violet-50'
                   )}
                 >
                   {item.label}
@@ -158,7 +158,7 @@ export default function Navbar() {
                       <Link
                         key={child.href}
                         href={child.href}
-                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600 transition-colors"
                       >
                         {child.label}
                       </Link>
@@ -206,7 +206,7 @@ export default function Navbar() {
               >
                 <Bell className="w-5 h-5" />
                 {unreadNotifications > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-violet-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
                     {unreadNotifications > 9 ? '9+' : unreadNotifications}
                   </span>
                 )}
@@ -232,10 +232,10 @@ export default function Navbar() {
                   </span>
                 </button>
                 <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-50">
-                  <Link href="/user/dashboard" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600">My Dashboard</Link>
-                  <Link href="/user/orders" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600">My Orders</Link>
-                  <Link href="/user/measurements" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600">Measurements</Link>
-                  <Link href="/user/wishlist" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600">Wishlist</Link>
+                  <Link href="/user/dashboard" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">My Dashboard</Link>
+                  <Link href="/user/orders" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">My Orders</Link>
+                  <Link href="/user/measurements" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">Measurements</Link>
+                  <Link href="/user/wishlist" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">Wishlist</Link>
                   {isAdmin && (
                     <>
                       <div className="border-t border-gray-100 my-1" />
@@ -254,8 +254,8 @@ export default function Navbar() {
                 className={cn(
                   'hidden lg:inline-flex px-4 py-2 rounded-full text-sm font-semibold transition-all',
                   isTransparent
-                    ? 'bg-white text-rose-600 hover:bg-rose-50'
-                    : 'bg-gradient-to-r from-rose-500 to-purple-600 text-white hover:shadow-md'
+                    ? 'bg-white text-violet-600 hover:bg-rose-50'
+                    : 'bg-gradient-to-r from-violet-600 to-purple-700 text-white hover:shadow-md'
                 )}
               >
                 Sign In
@@ -379,7 +379,7 @@ export default function Navbar() {
                                 <Link
                                   key={child.href}
                                   href={child.href}
-                                  className="flex items-center gap-2 pl-10 pr-6 py-3 text-sm text-gray-600 border-b border-gray-100 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                                  className="flex items-center gap-2 pl-10 pr-6 py-3 text-sm text-gray-600 border-b border-gray-100 hover:text-violet-600 hover:bg-violet-50 transition-colors"
                                 >
                                   <span className="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0" />
                                   {child.label}
@@ -394,7 +394,7 @@ export default function Navbar() {
                         href={section.href}
                         className={cn(
                           'flex items-center justify-between px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors',
-                          pathname === section.href && 'text-rose-600 bg-rose-50'
+                          pathname === section.href && 'text-violet-600 bg-violet-50'
                         )}
                       >
                         <span className="text-base font-semibold text-gray-900">{section.label}</span>
@@ -409,19 +409,19 @@ export default function Navbar() {
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Quick Access</p>
                   {user ? (
                     <>
-                      <Link href="/user/dashboard" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-rose-50 hover:text-rose-700 transition-colors">
+                      <Link href="/user/dashboard" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-violet-50 hover:text-violet-700 transition-colors">
                         <LayoutDashboard className="w-4 h-4 shrink-0" /> My Dashboard
                       </Link>
-                      <Link href="/user/orders" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-rose-50 hover:text-rose-700 transition-colors">
+                      <Link href="/user/orders" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-violet-50 hover:text-violet-700 transition-colors">
                         <Package className="w-4 h-4 shrink-0" /> My Orders
                       </Link>
-                      <Link href="/user/wishlist" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-rose-50 hover:text-rose-700 transition-colors">
+                      <Link href="/user/wishlist" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-violet-50 hover:text-violet-700 transition-colors">
                         <Heart className="w-4 h-4 shrink-0" /> Wishlist
                       </Link>
-                      <Link href="/user/measurements" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-rose-50 hover:text-rose-700 transition-colors">
+                      <Link href="/user/measurements" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-violet-50 hover:text-violet-700 transition-colors">
                         <Ruler className="w-4 h-4 shrink-0" /> Measurements
                       </Link>
-                      <Link href="/custom-design" className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-rose-500 to-purple-600 rounded-xl text-white font-semibold text-sm">
+                      <Link href="/custom-design" className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-violet-600 to-purple-700 rounded-xl text-white font-semibold text-sm">
                         <Upload className="w-4 h-4 shrink-0" /> Upload Your Design
                       </Link>
                       {isAdmin && (
@@ -431,7 +431,7 @@ export default function Navbar() {
                       )}
                     </>
                   ) : (
-                    <Link href="/custom-design" className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-rose-500 to-purple-600 rounded-xl text-white font-semibold text-sm">
+                    <Link href="/custom-design" className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-violet-600 to-purple-700 rounded-xl text-white font-semibold text-sm">
                       <Upload className="w-4 h-4 shrink-0" /> Upload Your Design
                     </Link>
                   )}
@@ -446,8 +446,8 @@ export default function Navbar() {
                       {userProfile?.photoURL ? (
                         <img src={userProfile.photoURL} alt="avatar" className="w-9 h-9 rounded-full object-cover" />
                       ) : (
-                        <div className="w-9 h-9 rounded-full bg-rose-100 flex items-center justify-center">
-                          <User className="w-4 h-4 text-rose-600" />
+                        <div className="w-9 h-9 rounded-full bg-violet-100 flex items-center justify-center">
+                          <User className="w-4 h-4 text-violet-600" />
                         </div>
                       )}
                       <div>
@@ -464,10 +464,10 @@ export default function Navbar() {
                   </div>
                 ) : (
                   <div className="space-y-2.5">
-                    <Link href="/auth/login" className="block w-full text-center py-3 bg-gradient-to-r from-rose-500 to-purple-600 text-white font-bold rounded-xl hover:shadow-md transition-all text-sm">
+                    <Link href="/auth/login" className="block w-full text-center py-3 bg-gradient-to-r from-violet-600 to-purple-700 text-white font-bold rounded-xl hover:shadow-md transition-all text-sm">
                       Sign In
                     </Link>
-                    <Link href="/auth/register" className="block w-full text-center py-3 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:border-rose-300 hover:text-rose-600 transition-all text-sm">
+                    <Link href="/auth/register" className="block w-full text-center py-3 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:border-rose-300 hover:text-violet-600 transition-all text-sm">
                       Create Account
                     </Link>
                   </div>

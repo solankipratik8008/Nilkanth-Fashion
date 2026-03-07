@@ -17,6 +17,7 @@ body {
   font-family: var(--font-inter), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #fdfaff;
 }
 
 .font-serif {
@@ -58,12 +59,33 @@ body {
   animation: shimmer 1.5s infinite;
 }
 
-/* Hero gradient text */
+/* Hero gradient text — lavender brand palette */
 .gradient-text {
-  background: linear-gradient(135deg, #e11d48, #9333ea);
+  background: linear-gradient(135deg, #7c3aed, #a855f7, #c084fc);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Brand gradient button */
+.btn-brand {
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  color: #fff;
+  border-radius: 9999px;
+  font-weight: 700;
+  transition: opacity 0.2s, box-shadow 0.2s;
+}
+.btn-brand:hover {
+  opacity: 0.92;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35);
+}
+
+/* Floral divider accent */
+.floral-divider {
+  background: linear-gradient(90deg, transparent, #ddd6fe, #c4b5fd, #ddd6fe, transparent);
+  height: 1px;
+  width: 100%;
+  opacity: 0.6;
 }
 
 /* Line clamp */

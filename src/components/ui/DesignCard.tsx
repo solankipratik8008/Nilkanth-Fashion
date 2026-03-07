@@ -67,7 +67,7 @@ export default function DesignCard({ design, className, wishlistIds = [], onWish
             <span className="px-2 py-0.5 bg-orange-500 text-white text-xs font-bold rounded-full">🔥 Trending</span>
           )}
           {design.featured && (
-            <span className="px-2 py-0.5 bg-rose-500 text-white text-xs font-bold rounded-full">⭐ Featured</span>
+            <span className="px-2 py-0.5 bg-violet-500 text-white text-xs font-bold rounded-full">⭐ Featured</span>
           )}
         </div>
 
@@ -77,8 +77,8 @@ export default function DesignCard({ design, className, wishlistIds = [], onWish
           className={cn(
             'absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200',
             isWishlisted
-              ? 'bg-rose-500 text-white scale-110'
-              : 'bg-white/80 text-gray-500 hover:bg-rose-50 hover:text-rose-500'
+              ? 'bg-violet-500 text-white scale-110'
+              : 'bg-white/80 text-gray-500 hover:bg-violet-50 hover:text-violet-500'
           )}
         >
           <Heart className={cn('w-4 h-4', isWishlisted && 'fill-white')} />
@@ -104,7 +104,7 @@ export default function DesignCard({ design, className, wishlistIds = [], onWish
       <div className="p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
           <Link href={`/designs/${design.id}`} className="group/title">
-            <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover/title:text-rose-600 transition-colors line-clamp-2">
+            <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover/title:text-violet-600 transition-colors line-clamp-2">
               {design.name}
             </h3>
           </Link>
@@ -138,11 +138,11 @@ export default function DesignCard({ design, className, wishlistIds = [], onWish
         <div className="flex items-center justify-between">
           <div>
             <span className="text-xs text-gray-400">Starting from</span>
-            <div className="text-lg font-bold text-rose-600">{formatPrice(design.basePrice)}</div>
+            <div className="text-lg font-bold text-violet-600">{formatPrice(design.basePrice)}</div>
           </div>
           <Link
             href={`/order/new?designId=${design.id}`}
-            className="px-4 py-2 bg-gradient-to-r from-rose-500 to-purple-600 text-white text-xs font-bold rounded-full hover:shadow-md hover:scale-105 transition-all"
+            className="px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-700 text-white text-xs font-bold rounded-full hover:shadow-md hover:scale-105 transition-all"
           >
             Order
           </Link>
