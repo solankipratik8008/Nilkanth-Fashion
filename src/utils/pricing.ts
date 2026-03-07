@@ -36,11 +36,11 @@ export const calculateEstimatedPrice = (
   fabricType: FabricType,
   fabricSource: 'self-provided' | 'nilkanth-sources'
 ): number => {
-  const tailoringBase = design.basePrice;
-  const fabricCost = fabricSource === 'nilkanth-sources' ? fabricPricing[fabricType] * 5 : 0;
-  const complexityFactor = complexityMultiplier[design.complexity] || 1;
-  const total = tailoringBase * complexityFactor + fabricCost;
-  return Math.round(total);
+  // Admin-set basePrice IS the all-in tailoring price — no complexity multiplier applied.
+  // A 10% reduction is applied when the customer provides their own fabric.
+  const tailoringCost = design.basePrice;
+  const selfProvidedDiscount = fabricSource === 'self-provided' ? Math.round(tailoringCost * 0.1) : 0;
+  return Math.max(0, tailoringCost - selfProvidedDiscount);
 };
 
 export const formatPrice = (price: number): string => {

@@ -82,7 +82,7 @@ function extractYoutubeId(url: string): string | null {
   return null;
 }
 
-const TABS = ['homepage', 'media', 'navigation', 'pages', 'footer', 'about & contact', 'testimonials', 'faqs'];
+const TABS = ['homepage', 'media', 'navigation', 'pages', 'footer', 'about & contact', 'team', 'testimonials', 'faqs'];
 
 export default function ContentPage() {
   const { isAdmin } = useAuth();
@@ -690,10 +690,37 @@ export default function ContentPage() {
         {activeTab === 'about & contact' && (
           <>
             <div className="bg-gray-900 rounded-2xl p-5 border border-white/5 space-y-4">
-              <h3 className="text-white font-semibold text-sm">About Section</h3>
-              <TextField label="Section Title" value={content.aboutTitle} onChange={v => set('aboutTitle', v)} />
-              <TextField label="About Text" value={content.aboutText} onChange={v => set('aboutText', v)} multiline />
+              <h3 className="text-white font-semibold text-sm">About Page — Hero</h3>
+              <p className="text-gray-500 text-xs">This text appears in the large hero section at the top of the About page.</p>
+              <TextField label="Hero Title (use comma for line break, e.g. 'Crafting Dreams, One Stitch at a Time')" value={content.aboutHeroTitle} onChange={v => set('aboutHeroTitle', v)} placeholder="Crafting Dreams, One Stitch at a Time" />
+              <TextField label="Hero Subtitle" value={content.aboutHeroSubtitle} onChange={v => set('aboutHeroSubtitle', v)} multiline placeholder="A brief inspiring description of your brand..." />
             </div>
+
+            <div className="bg-gray-900 rounded-2xl p-5 border border-white/5 space-y-4">
+              <h3 className="text-white font-semibold text-sm">About Page — Our Story</h3>
+              <TextField label="Story Section Title" value={content.aboutStoryTitle} onChange={v => set('aboutStoryTitle', v)} placeholder="A Family Tradition of Excellence" />
+              <TextField label="Story Paragraph 1" value={content.aboutStoryP1} onChange={v => set('aboutStoryP1', v)} multiline />
+              <TextField label="Story Paragraph 2" value={content.aboutStoryP2} onChange={v => set('aboutStoryP2', v)} multiline />
+              <TextField label="Story Paragraph 3" value={content.aboutStoryP3} onChange={v => set('aboutStoryP3', v)} multiline />
+              <div>
+                <p className="text-xs text-gray-400 mb-2">Stats (shown below the story)</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { vKey: 'aboutStat1Value' as const, lKey: 'aboutStat1Label' as const, placeholder: '500+', lPlaceholder: 'Happy Clients' },
+                    { vKey: 'aboutStat2Value' as const, lKey: 'aboutStat2Label' as const, placeholder: '250+', lPlaceholder: 'Designs' },
+                    { vKey: 'aboutStat3Value' as const, lKey: 'aboutStat3Label' as const, placeholder: '15+', lPlaceholder: 'Years Experience' },
+                  ].map(({ vKey, lKey, placeholder, lPlaceholder }) => (
+                    <div key={vKey} className="bg-gray-800 rounded-xl p-3 space-y-2">
+                      <input value={(content as any)[vKey] || ''} onChange={e => set(vKey, e.target.value)} placeholder={placeholder}
+                        className="w-full px-3 py-2 bg-gray-700 border border-white/10 rounded-lg text-white text-sm font-bold focus:outline-none focus:border-purple-500 placeholder-gray-600" />
+                      <input value={(content as any)[lKey] || ''} onChange={e => set(lKey, e.target.value)} placeholder={lPlaceholder}
+                        className="w-full px-3 py-2 bg-gray-700 border border-white/10 rounded-lg text-gray-300 text-xs focus:outline-none focus:border-purple-500 placeholder-gray-600" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <div className="bg-gray-900 rounded-2xl p-5 border border-white/5 space-y-4">
               <h3 className="text-white font-semibold text-sm">Contact Information</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -705,6 +732,98 @@ export default function ContentPage() {
               <TextField label="Address / Service Area" value={content.contactAddress} onChange={v => set('contactAddress', v)} />
             </div>
           </>
+        )}
+
+        {/* ─── TEAM ─── */}
+        {activeTab === 'team' && (
+          <div className="space-y-5">
+            <div className="bg-gray-900 rounded-2xl p-5 border border-white/5">
+              <h3 className="text-white font-semibold text-sm mb-1">Team Members</h3>
+              <p className="text-gray-500 text-xs mb-4">These members appear in the "Meet the Artisans" section on the About page. After adding or editing, click "Save All" to apply changes.</p>
+
+              {/* Add new member form */}
+              <div className="bg-gray-800 rounded-xl p-4 mb-4 space-y-3">
+                <h4 className="text-gray-300 text-xs font-semibold uppercase tracking-wide">Add New Member</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">Name *</label>
+                    <input id="tm-name" placeholder="e.g. Nilkanthbhai"
+                      className="w-full px-3 py-2 bg-gray-700 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500 placeholder-gray-600" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">Role / Title *</label>
+                    <input id="tm-role" placeholder="e.g. Master Tailor & Founder"
+                      className="w-full px-3 py-2 bg-gray-700 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500 placeholder-gray-600" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">Experience / Specialty</label>
+                    <input id="tm-exp" placeholder="e.g. 15+ years experience"
+                      className="w-full px-3 py-2 bg-gray-700 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500 placeholder-gray-600" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">Photo URL</label>
+                    <input id="tm-image" placeholder="https://..."
+                      className="w-full px-3 py-2 bg-gray-700 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500 placeholder-gray-600" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Short Bio (optional)</label>
+                  <textarea id="tm-bio" rows={2} placeholder="Brief description about this team member..."
+                    className="w-full px-3 py-2 bg-gray-700 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500 placeholder-gray-600 resize-none" />
+                </div>
+                <button
+                  onClick={() => {
+                    const name = (document.getElementById('tm-name') as HTMLInputElement)?.value?.trim();
+                    const role = (document.getElementById('tm-role') as HTMLInputElement)?.value?.trim();
+                    const experience = (document.getElementById('tm-exp') as HTMLInputElement)?.value?.trim();
+                    const image = (document.getElementById('tm-image') as HTMLInputElement)?.value?.trim();
+                    const bio = (document.getElementById('tm-bio') as HTMLTextAreaElement)?.value?.trim();
+                    if (!name || !role) { toast.error('Name and role are required'); return; }
+                    const newMember = { name, role, experience: experience || '', image: image || '', bio: bio || '' };
+                    set('teamMembers', [...(content.teamMembers || []), newMember]);
+                    (['tm-name', 'tm-role', 'tm-exp', 'tm-image', 'tm-bio'] as string[]).forEach(id => {
+                      const el = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement;
+                      if (el) el.value = '';
+                    });
+                    toast.success('Member added — click "Save All" to publish');
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                  <Plus className="w-4 h-4" /> Add Member
+                </button>
+              </div>
+
+              {/* Existing members */}
+              {(!content.teamMembers || content.teamMembers.length === 0) ? (
+                <p className="text-gray-500 text-sm text-center py-6">No team members yet. Add one above, then click "Save All".</p>
+              ) : (
+                <div className="space-y-3">
+                  {content.teamMembers.map((m, i) => (
+                    <div key={i} className="flex items-start gap-3 bg-gray-800 rounded-xl p-3">
+                      <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-700 shrink-0">
+                        {m.image ? (
+                          <img src={m.image} alt={m.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">{m.name[0]}</div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white text-sm font-semibold">{m.name}</div>
+                        <div className="text-purple-400 text-xs">{m.role}</div>
+                        {m.experience && <div className="text-gray-400 text-xs">{m.experience}</div>}
+                        {m.bio && <div className="text-gray-500 text-xs mt-1 line-clamp-2">{m.bio}</div>}
+                      </div>
+                      <button
+                        onClick={() => set('teamMembers', content.teamMembers.filter((_, idx) => idx !== i))}
+                        className="text-gray-400 hover:text-red-400 shrink-0 p-1">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <p className="text-gray-500 text-xs text-center">After making changes, click "Save All" at the top of the page to publish them.</p>
+          </div>
         )}
 
         {/* ─── TESTIMONIALS ─── */}
