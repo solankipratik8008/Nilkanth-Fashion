@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import {
   Search, User, Menu, X, ChevronDown, ChevronRight, Heart, Bell,
-  Package, Ruler, LogOut, ShieldCheck, Upload, LayoutDashboard
+  Package, Ruler, LogOut, ShieldCheck, Upload, LayoutDashboard, Settings
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/utils/cn';
@@ -59,10 +59,12 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [profileOpen, setProfileOpen] = useState(false);
   const pathname = usePathname();
   const { user, userProfile, logOut, isAdmin } = useAuth();
   const { content } = useSiteContent();
   const navRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const allNavItems = [
     ...navItems,
@@ -85,7 +87,19 @@ export default function Navbar() {
     setMobileOpen(false);
     setMobileExpanded(null);
     setActiveDropdown(null);
+    setProfileOpen(false);
   }, [pathname]);
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+    if (profileOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [profileOpen]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -215,13 +229,16 @@ export default function Navbar() {
 
             {/* Desktop User Menu */}
             {user ? (
-              <div className="relative group hidden lg:block">
-                <button className={cn(
-                  'flex items-center gap-2 px-3 py-2 rounded-full transition-all',
-                  isTransparent
-                    ? 'bg-white/10 hover:bg-white/20 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                )}>
+              <div className="relative hidden lg:block" ref={profileRef}>
+                <button
+                  onClick={() => setProfileOpen(o => !o)}
+                  className={cn(
+                    'flex items-center gap-2 px-3 py-2 rounded-full transition-all',
+                    isTransparent
+                      ? 'bg-white/10 hover:bg-white/20 text-white'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  )}
+                >
                   {userProfile?.photoURL ? (
                     <img src={userProfile.photoURL} alt="avatar" className="w-6 h-6 rounded-full" />
                   ) : (
@@ -231,22 +248,33 @@ export default function Navbar() {
                     {userProfile?.displayName?.split(' ')[0] || 'Account'}
                   </span>
                 </button>
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-50">
-                  <Link href="/user/dashboard" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">My Dashboard</Link>
-                  <Link href="/user/orders" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">My Orders</Link>
-                  <Link href="/user/measurements" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">Measurements</Link>
-                  <Link href="/user/wishlist" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">Wishlist</Link>
-                  {isAdmin && (
-                    <>
+                <AnimatePresence>
+                  {profileOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50"
+                    >
+                      <Link href="/user/dashboard" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">My Dashboard</Link>
+                      <Link href="/user/orders" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">My Orders</Link>
+                      <Link href="/user/measurements" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">Measurements</Link>
+                      <Link href="/user/wishlist" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">Wishlist</Link>
+                      <Link href="/user/settings" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-violet-600">Account Settings</Link>
+                      {isAdmin && (
+                        <>
+                          <div className="border-t border-gray-100 my-1" />
+                          <Link href="/admin/dashboard" className="block px-4 py-2.5 text-sm text-purple-600 font-semibold hover:bg-purple-50">
+                            Admin Panel
+                          </Link>
+                        </>
+                      )}
                       <div className="border-t border-gray-100 my-1" />
-                      <Link href="/admin/dashboard" className="block px-4 py-2.5 text-sm text-purple-600 font-semibold hover:bg-purple-50">
-                        Admin Panel
-                      </Link>
-                    </>
+                      <button onClick={logOut} className="block w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">Sign Out</button>
+                    </motion.div>
                   )}
-                  <div className="border-t border-gray-100 my-1" />
-                  <button onClick={logOut} className="block w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">Sign Out</button>
-                </div>
+                </AnimatePresence>
               </div>
             ) : (
               <Link
@@ -404,6 +432,19 @@ export default function Navbar() {
                   </motion.div>
                 ))}
 
+                {/* Dynamic nav links from CMS */}
+                {content.navLinks && content.navLinks.length > 0 && (
+                  <div className="px-6 pt-2 pb-1">
+                    {content.navLinks.map(link => (
+                      <Link key={link.href} href={link.href}
+                        className="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        <span className="text-base font-semibold text-gray-900">{link.label}</span>
+                        <ChevronRight className="w-5 h-5 text-gray-400" />
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
                 {/* Quick links */}
                 <div className="px-6 py-5 space-y-3">
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Quick Access</p>
@@ -420,6 +461,9 @@ export default function Navbar() {
                       </Link>
                       <Link href="/user/measurements" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-violet-50 hover:text-violet-700 transition-colors">
                         <Ruler className="w-4 h-4 shrink-0" /> Measurements
+                      </Link>
+                      <Link href="/user/settings" className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-gray-700 font-medium text-sm hover:bg-violet-50 hover:text-violet-700 transition-colors">
+                        <Settings className="w-4 h-4 shrink-0" /> Account Settings
                       </Link>
                       <Link href="/custom-design" className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-violet-600 to-purple-700 rounded-xl text-white font-semibold text-sm">
                         <Upload className="w-4 h-4 shrink-0" /> Upload Your Design

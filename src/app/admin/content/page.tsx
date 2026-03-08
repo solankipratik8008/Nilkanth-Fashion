@@ -84,6 +84,14 @@ function extractYoutubeId(url: string): string | null {
 
 const TABS = ['homepage', 'media', 'navigation', 'pages', 'footer', 'about & contact', 'team', 'testimonials', 'faqs'];
 
+// Default team shown on the About page when no Firestore data exists.
+// Pre-loaded in the admin Team tab so admin can edit/remove them.
+const DEFAULT_TEAM_MEMBERS = [
+  { name: 'Nilkanthbhai', role: 'Master Tailor & Founder', experience: '15+ years experience', bio: '', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80' },
+  { name: 'Priyaben', role: 'Senior Designer', experience: 'Specializes in Bridal Wear', bio: '', image: 'https://images.unsplash.com/photo-1494790108755-2616b612b834?w=300&q=80' },
+  { name: 'Kavitaben', role: 'Embroidery Specialist', experience: 'Hand embroidery expert', bio: '', image: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=300&q=80' },
+];
+
 export default function ContentPage() {
   const { isAdmin } = useAuth();
   const [content, setContent] = useState<SiteContent>(DEFAULT_CONTENT);
@@ -780,7 +788,8 @@ export default function ContentPage() {
                     const bio = (document.getElementById('tm-bio') as HTMLTextAreaElement)?.value?.trim();
                     if (!name || !role) { toast.error('Name and role are required'); return; }
                     const newMember = { name, role, experience: experience || '', image: image || '', bio: bio || '' };
-                    set('teamMembers', [...(content.teamMembers || []), newMember]);
+                    const currentList = content.teamMembers?.length > 0 ? content.teamMembers : DEFAULT_TEAM_MEMBERS;
+                    set('teamMembers', [...currentList, newMember]);
                     (['tm-name', 'tm-role', 'tm-exp', 'tm-image', 'tm-bio'] as string[]).forEach(id => {
                       const el = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement;
                       if (el) el.value = '';
@@ -793,34 +802,41 @@ export default function ContentPage() {
               </div>
 
               {/* Existing members */}
-              {(!content.teamMembers || content.teamMembers.length === 0) ? (
-                <p className="text-gray-500 text-sm text-center py-6">No team members yet. Add one above, then click "Save All".</p>
-              ) : (
-                <div className="space-y-3">
-                  {content.teamMembers.map((m, i) => (
-                    <div key={i} className="flex items-start gap-3 bg-gray-800 rounded-xl p-3">
-                      <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-700 shrink-0">
-                        {m.image ? (
-                          <img src={m.image} alt={m.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">{m.name[0]}</div>
-                        )}
+              {(() => {
+                const isUsingDefaults = !content.teamMembers || content.teamMembers.length === 0;
+                const displayedTeam = isUsingDefaults ? DEFAULT_TEAM_MEMBERS : content.teamMembers;
+                return (
+                  <div className="space-y-3">
+                    {isUsingDefaults && (
+                      <div className="bg-yellow-900/30 border border-yellow-700/40 rounded-xl px-4 py-3 text-yellow-400 text-xs">
+                        These are the default team members shown on your site. Delete or edit any of them, then click "Save All" to apply.
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-white text-sm font-semibold">{m.name}</div>
-                        <div className="text-purple-400 text-xs">{m.role}</div>
-                        {m.experience && <div className="text-gray-400 text-xs">{m.experience}</div>}
-                        {m.bio && <div className="text-gray-500 text-xs mt-1 line-clamp-2">{m.bio}</div>}
+                    )}
+                    {displayedTeam.map((m, i) => (
+                      <div key={i} className="flex items-start gap-3 bg-gray-800 rounded-xl p-3">
+                        <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-700 shrink-0">
+                          {m.image ? (
+                            <img src={m.image} alt={m.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">{m.name[0]}</div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-white text-sm font-semibold">{m.name}</div>
+                          <div className="text-purple-400 text-xs">{m.role}</div>
+                          {m.experience && <div className="text-gray-400 text-xs">{m.experience}</div>}
+                          {m.bio && <div className="text-gray-500 text-xs mt-1 line-clamp-2">{m.bio}</div>}
+                        </div>
+                        <button
+                          onClick={() => set('teamMembers', displayedTeam.filter((_, idx) => idx !== i))}
+                          className="text-gray-400 hover:text-red-400 shrink-0 p-1">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
-                      <button
-                        onClick={() => set('teamMembers', content.teamMembers.filter((_, idx) => idx !== i))}
-                        className="text-gray-400 hover:text-red-400 shrink-0 p-1">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
             <p className="text-gray-500 text-xs text-center">After making changes, click "Save All" at the top of the page to publish them.</p>
           </div>

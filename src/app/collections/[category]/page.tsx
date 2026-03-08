@@ -3,11 +3,12 @@ import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { SlidersHorizontal, Search, X } from 'lucide-react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { designs as staticDesigns, categories } from '@/data/designs';
 import DesignCard from '@/components/ui/DesignCard';
 import { Occasion, FabricType } from '@/types';
+import { useAuth } from '@/context/AuthContext';
 
 const categoryLabels: Record<string, string> = {
   'girls-traditional': 'Girls Traditional',
@@ -38,6 +39,7 @@ const sortOptions = [
 export default function CollectionPage() {
   const params = useParams();
   const category = params.category as string;
+  const { user } = useAuth();
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOccasions, setSelectedOccasions] = useState<Occasion[]>([]);
@@ -47,6 +49,14 @@ export default function CollectionPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [trendingOnly, setTrendingOnly] = useState(false);
   const [firestoreDesigns, setFirestoreDesigns] = useState<any[]>([]);
+
+  // Load wishlist from Firestore
+  useEffect(() => {
+    if (!user) { setWishlistIds([]); return; }
+    getDoc(doc(db, 'users', user.uid))
+      .then(snap => setWishlistIds(snap.data()?.wishlistIds || []))
+      .catch(() => {});
+  }, [user]);
 
   // Load Firestore designs for this category (overrides + new ones)
   useEffect(() => {
@@ -116,7 +126,18 @@ export default function CollectionPage() {
     }
   }, [mergedDesigns, searchQuery, selectedOccasions, selectedFabrics, priceRange, sortBy, trendingOnly]);
 
-  const toggleWishlist = (id: string) => setWishlistIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  const toggleWishlist = async (id: string) => {
+    if (!user) return;
+    const newIds = wishlistIds.includes(id)
+      ? wishlistIds.filter(i => i !== id)
+      : [...wishlistIds, id];
+    setWishlistIds(newIds);
+    try {
+      await updateDoc(doc(db, 'users', user.uid), { wishlistIds: newIds });
+    } catch {
+      setWishlistIds(wishlistIds);
+    }
+  };
   const toggleOccasion = (o: Occasion) => setSelectedOccasions(prev => prev.includes(o) ? prev.filter(x => x !== o) : [...prev, o]);
   const toggleFabric = (f: FabricType) => setSelectedFabrics(prev => prev.includes(f) ? prev.filter(x => x !== f) : [...prev, f]);
 

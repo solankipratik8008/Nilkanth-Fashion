@@ -10,6 +10,7 @@ const DEFAULT_TEAM = [
   { name: 'Priyaben', role: 'Senior Designer', experience: 'Specializes in Bridal Wear', bio: '', image: 'https://images.unsplash.com/photo-1494790108755-2616b612b834?w=300&q=80' },
   { name: 'Kavitaben', role: 'Embroidery Specialist', experience: 'Hand embroidery expert', bio: '', image: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=300&q=80' },
 ];
+// Note: DEFAULT_TEAM is only shown when admin has never saved team data to Firestore.
 
 const values = [
   { icon: Heart, title: 'Made with Love', desc: 'Every stitch is crafted with passion and dedication to perfection.' },

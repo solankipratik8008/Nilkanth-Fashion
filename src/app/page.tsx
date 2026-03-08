@@ -12,8 +12,9 @@ import DesignCard from '@/components/ui/DesignCard';
 import FloralDivider from '@/components/ui/FloralDivider';
 import { useTheme } from '@/context/ThemeContext';
 import { useSiteContent } from '@/hooks/useSiteContent';
-import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, limit, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { useAuth } from '@/context/AuthContext';
 
 const heroSlides = [
   {
@@ -36,12 +37,7 @@ const heroSlides = [
   },
 ];
 
-const stats = [
-  { value: '500+', label: 'Happy Clients', icon: Users },
-  { value: '250+', label: 'Designs', icon: Scissors },
-  { value: '5★', label: 'Avg Rating', icon: Star },
-  { value: '10+', label: 'Years Experience', icon: Crown },
-];
+// Stats are defined below in the component using content from useSiteContent
 
 const features = [
   { icon: Scissors, title: '100% Custom Made', desc: 'Every piece tailored to your exact measurements' },
@@ -84,6 +80,22 @@ export default function HomePage() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const { theme } = useTheme();
   const { content } = useSiteContent();
+  const { user } = useAuth();
+
+  const stats = [
+    { value: content.aboutStat1Value || '500+', label: content.aboutStat1Label || 'Happy Clients', icon: Users },
+    { value: content.aboutStat2Value || '250+', label: content.aboutStat2Label || 'Designs', icon: Scissors },
+    { value: '5★', label: 'Avg Rating', icon: Star },
+    { value: content.aboutStat3Value || '10+', label: content.aboutStat3Label || 'Years Experience', icon: Crown },
+  ];
+
+  // Load wishlist from Firestore when user is logged in
+  useEffect(() => {
+    if (!user) { setWishlistIds([]); return; }
+    getDoc(doc(db, 'users', user.uid))
+      .then(snap => setWishlistIds(snap.data()?.wishlistIds || []))
+      .catch(() => {});
+  }, [user]);
 
   // Load Firestore overrides so admin changes appear on home page
   useEffect(() => {
@@ -138,8 +150,17 @@ export default function HomePage() {
     return [...staticTrending, ...firestoreTrending];
   }, [firestoreDesigns, firestoreOnlyDesigns]);
 
-  const toggleWishlist = (id: string) => {
-    setWishlistIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  const toggleWishlist = async (id: string) => {
+    if (!user) return;
+    const newIds = wishlistIds.includes(id)
+      ? wishlistIds.filter(i => i !== id)
+      : [...wishlistIds, id];
+    setWishlistIds(newIds);
+    try {
+      await updateDoc(doc(db, 'users', user.uid), { wishlistIds: newIds });
+    } catch {
+      setWishlistIds(wishlistIds); // revert on error
+    }
   };
 
   // Merge theme into first hero slide
